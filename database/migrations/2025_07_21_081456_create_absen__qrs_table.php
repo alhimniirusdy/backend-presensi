@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kelas', function (Blueprint $table) {
+        Schema::create('absen__qrs', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->string('status');
-            $table->double('latitude');
-            $table->double('longitude');
+            $table->foreignId('jadwal_id')->constrained('jadwals')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->date('tanggal_absen');
+            $table->string('token_qr');
+            $table->dateTime('expired_at');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kelas');
+        Schema::dropIfExists('absen__qrs');
     }
 };
