@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('mapels', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_mapel');
-            $table->string('kode_mapel');
+            $table->string('nama');
+            $table->string('kode');
             $table->foreignId('guru_id')->constrained('gurus')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
