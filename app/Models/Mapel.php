@@ -13,4 +13,8 @@ class Mapel extends Model
         'kode',
         'guru_id',
     ];
+    public function guru()
+    {
+        return $this->belongsTo(Guru::class);
+    }
 }

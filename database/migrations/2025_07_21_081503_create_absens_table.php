@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('siswa_id')->constrained('siswas')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('jadwal_id')->constrained('jadwals')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('absen_gr_id')->constrained('absen_qrs')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('absenqr_id')->constrained('absen__qrs')->cascadeOnDelete()->cascadeOnUpdate();
             $table->dateTime('waktu');
             $table->double('latitude');
             $table->double('longitude');

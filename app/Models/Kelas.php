@@ -13,5 +13,6 @@ class Kelas extends Model
         'status',
         'latitude',
         'longitude',
+        'radius',
     ];
 }

@@ -11,10 +11,22 @@ class Absen extends Model
     protected $fillable = [
         'siswa_id',
         'jadwal_id',
-        'absen_qr_id',
+        'absenqr_id',
         'waktu',
         'latitude',
         'longitude',
         'status',
     ];
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class);
+    }
+    public function jadwal()
+    {
+        return $this->belongsTo(Jadwal::class);
+    }
+    public function absenqr()
+    {
+        return $this->belongsTo(Absen_Qr::class);
+    }
 }

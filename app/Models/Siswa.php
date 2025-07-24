@@ -16,4 +16,12 @@ class Siswa extends Model
         'jenis_kelamin',
         'no_telepon',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function kelas()
+    {
+        return $this->belongsTo(Kelas::class);
+    }
 }

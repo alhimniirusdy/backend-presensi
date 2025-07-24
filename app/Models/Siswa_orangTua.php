@@ -13,4 +13,12 @@ class Siswa_orangTua extends Model
         'orang_tua_id',
         'hubungan',
     ];
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class);
+    }
+    public function orangtua()
+    {
+        return $this->belongsTo(OrangTua::class);
+    }
 }

@@ -14,4 +14,8 @@ class Absen_Qr extends Model
         'token_qr',
         'expired_at',
     ];
+    public function jadwal()
+    {
+        return $this->belongsTo(Jadwal::class);
+    }
 }
