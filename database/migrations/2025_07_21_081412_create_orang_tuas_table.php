@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('orang_tuas', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('siswa_id')->constrained('siswas')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('nama');
             $table->string('alamat')->nullable();
             $table->string('pekerjaan')->nullable();
             $table->string('no_telepon')->nullable();
+            $table->string('hubungan');
             $table->timestamps();
         });
     }

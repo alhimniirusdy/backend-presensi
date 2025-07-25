@@ -6,6 +6,7 @@ use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\MapelController;
 use App\Http\Controllers\OrangTuaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SiswaController;
@@ -27,11 +28,11 @@ Route::middleware(['auth'])->group(function () {
     // Jadwal
     Route::resource('jadwal', JadwalController::class);
     // kelas
-    Route::resource('kelas', KelasController::class);
-    // orang tua siswa
-    Route::resource('ortu_siswa', SiswaOrangTuaController::class);
-    // orang tua
-    Route::resource('orangtua', OrangTuaController::class);
+    Route::resource('kelas', KelasController::class)->parameters([
+        'kelas' => 'kelas'
+    ]);
+    // mapel
+    Route::resource('mapel', MapelController::class);
     // siswa
     Route::resource('siswa', SiswaController::class);
     // user

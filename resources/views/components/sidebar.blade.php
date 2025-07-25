@@ -47,23 +47,15 @@
                     <li class="{{ Request::is('kelas*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('kelas.index') }}">Kelas</a>
                     </li>
+                    <li class="{{ Request::is('mapel*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('mapel.index') }}">Mata Pelajaran</a>
+                    </li>
                 </ul>
             </li>
-            <li class="nav-item dropdown {{ $type_menu === 'siswa' ? 'active' : '' }}">
-                <a href="#" class="nav-link has-dropdown">
+            <li class="{{ $type_menu === 'siswa' ? 'active' : '' }}">
+                <a href="{{ route('siswa.index') }}" class="nav-link">
                     <i class="fas fa-user-graduate"></i><span>Kelola Siswa</span>
                 </a>
-                <ul class="dropdown-menu">
-                    <li class="{{ Request::is('siswa*') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('siswa.index') }}">Siswa</a>
-                    </li>
-                    <li class="{{ Request::is('orangtua*') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('orangtua.index') }}">Orang Tua</a>
-                    </li>
-                    <li class="{{ Request::is('orangtua_siswa*') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('ortu_siswa.index') }}">Orangtua Siswa</a>
-                    </li>
-                </ul>
             </li>
 
             @if (Auth::user()->role === 'Admin')

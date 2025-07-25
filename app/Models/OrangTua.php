@@ -9,9 +9,16 @@ class OrangTua extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'siswa_id',
         'nama',
         'alamat',
         'pekerjaan',
         'no_telepon',
+        'hubungan'
     ];
+
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class);
+    }
 }

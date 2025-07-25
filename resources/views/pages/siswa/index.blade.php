@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
 @section('title', 'Data Siswa')
-
+@push('style')
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="{{ asset('library/d') }}">
+@endpush
 @section('main')
     <div class="main-content">
         <section class="section">
@@ -75,8 +78,8 @@
                                                 <form action="{{ route('siswa.destroy', $siswa) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-icon btn-danger m-1"
-                                                        data-toggle="tooltip" title="Hapus Siswa">
+                                                    <button  class="btn btn-sm btn-icon m-1 btn-danger confirm-delete"
+                                                        data-toggle="tooltip" title="Hapus">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>

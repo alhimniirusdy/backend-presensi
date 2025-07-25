@@ -100,7 +100,8 @@
                                                                 @csrf
                                                                 @method('delete')
                                                                 <button
-                                                                    class="btn btn-sm btn-icon m-1 btn-danger confirm-delete ">
+                                                                    class="btn btn-sm btn-icon m-1 btn-danger confirm-delete"
+                                                                    data-toggle="tooltip" title="Hapus">
                                                                     <i class="fas fa-trash"></i>
                                                                 </button>
                                                             </form>
