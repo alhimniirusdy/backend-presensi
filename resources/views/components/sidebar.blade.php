@@ -20,15 +20,15 @@
             </li>
 
             <li class="menu-header">Master Data</li>
-            <li class="nav-item dropdown {{ $type_menu === 'absens' ? 'active' : '' }}">
+            <li class="nav-item dropdown {{ $type_menu === 'absen' ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown">
                     <i class="fas fa-clipboard-list"></i><span>Kelola Absen</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="{{ Request::is('absens*') ? 'active' : '' }}">
+                    <li class="{{ Request::is('absen*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('absen.index') }}">Absens</a>
                     </li>
-                    <li class="{{ Request::is('absen_qr*') ? 'active' : '' }}">
+                    <li class="{{ Request::is('absenqr*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('absenqr.index') }}">Absen QR</a>
                     </li>
                 </ul>

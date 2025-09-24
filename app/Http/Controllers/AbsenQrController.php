@@ -4,91 +4,85 @@ namespace App\Http\Controllers;
 
 use App\Models\Absen_Qr;
 use App\Models\Jadwal;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Carbon\Carbon;
-use Endroid\QrCode\Builder\Builder;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
 
 class AbsenQrController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         $type_menu = 'absen';
-
-        $keyword = trim($request->input('nama'));
-
-        // cari nama dari relasi ke jadwal untuk cari mapel dan guru
-        $absenqr = Absen_Qr::with('jadwal')
-            ->when($keyword, function ($query, $name) {
-                $query->whereHas('user', function ($q) use ($name) {
-                    $q->where('name', 'like', '%' . $name . '%');
-                });
-            })
-            ->latest()
-            ->paginate(10);
-
-        $absenqr->appends(['nama' => $keyword]);
-
-        return view('pages.absenqr.index', compact('type_menu', 'guru'));
+        $absenqr = Absen_Qr::with('jadwal.mapel', 'jadwal.kelas')->latest()->paginate(10);
+        return view('pages.absenqr.index', compact('absenqr', 'type_menu'));
     }
+
     public function create()
     {
         $type_menu = 'absen';
-        $jadwal = Jadwal::all();
+        // Optimasi query, hanya ambil kolom yang dibutuhkan
+        $jadwal = Jadwal::select('id', 'nama_mapel', 'hari')->get(); // Ganti 'nama_mapel' sesuai nama kolom Anda
 
         return view('pages.absenqr.create', compact('type_menu', 'jadwal'));
     }
 
+    protected function generateQRCodeToken()
+    {
+        do {
+            $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            $code = substr(str_shuffle($characters), 0, 6);
+        } while (Absen_Qr::where('token_qr', $code)->exists());
+
+        return $code;
+    }
+
     public function store(Request $request)
     {
-
         $request->validate([
-            'jadwal_id' => 'required',
+            'jadwal_id' => 'required|exists:jadwals,id',
             'tanggal_absen' => 'required|date',
-            'token_qr' => 'required',
-            'expired_at' => 'required',
+            'expired_at' => 'required|date|after:tanggal_absen',
         ]);
 
         $absenqr = Absen_Qr::create([
             'jadwal_id' => $request->jadwal_id,
             'tanggal_absen' => $request->tanggal_absen,
-            'token_qr' => $request->token_qr,
+            'token_qr' => $this->generateQRCodeToken(),
             'expired_at' => $request->expired_at,
         ]);
 
-        return Redirect::route('absenqr.index')->with('success', 'Absen Kode QR ' . $absenqr->jadwal->mapel->nama . 'Tanggal Absen' . $absenqr->tanggal->absen . ' berhasil di tambah.');
+        return redirect()->route('absenqr.index')->with('success', 'QR Token Berhasil di Buat untuk Tanggal Absen ' . $absenqr->tanggal_absen);
     }
+    // public function update(Request $request, AbsenQr $absenqr)
+    // {
 
-    public function edit(Absen_Qr $absenQr)
+    // }
+    public function show($id)
     {
         $type_menu = 'absen';
-        $jadwal = Jadwal::all();
+        // 1. Cari data berdasarkan ID, jika tidak ada akan error 404
+        $absenqr = Absen_Qr::with('jadwal.mapel', 'jadwal.kelas')->findOrFail($id);
 
-        return view('pages.absenqr.edit', compact('absenqr', 'type_menu', 'jadwal'));
-
+        // 2. Kirim data tersebut ke file view
+        return view('pages.absenqr.show', compact('absenqr', 'type_menu'));
     }
-    public function update(Request $request, Absen_Qr $absenQr)
+
+    public function displayQrCode($id)
     {
-        $request->validate([
-             'jadwal_id' => 'required',
-            'tanggal_absen' => 'required|date',
-            'token_qr' => 'required',
-            'expired_at' => 'required',
-        ]);
-
-        $absenQr->update([
-            'jadwal_id' => $request->jadwal_id,
-            'tanggal_absen' => $request->tanggal_absen,
-            'token_qr' => $request->token_qr,
-            'expired_at' => $request->expired_at,
-        ]);
-
-        return Redirect::route('absenqr.index')->with('success', 'Absen Kode QR ' . $absenQr->jadwal->mapel->nama . 'Tanggal Absen' . $absenQr->tanggal->absen .' berhasil di ubah.');
+       
     }
-    public function destroy(Absen_Qr $absenQr)
+
+    public function downloadPDF($id)
     {
-        $absenQr->delete();
-        return Redirect::route('kelas.index')->with('success', 'Absen Kode QR ' . $absenQr->jadwal->mapel->nama . 'Tanggal Absen' . $absenQr->tanggal->absen . ' berhasil di hapus.');
+        $qrAbsen = Absen_Qr::findOrFail($id);
+
+       
+        $data = [
+            'qrAbsen' => $qrAbsen,
+            'qrCodeBase64' => $qrCodeBase64, // Kirim base64 ke view PDF
+        ];
+
+        $pdf = Pdf::loadView('pages.pdf.qr_absen', $data);
+        return $pdf->download('qr_absen_' . $qrAbsen->tanggal_absen . '.pdf');
     }
 }

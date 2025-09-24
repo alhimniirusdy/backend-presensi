@@ -125,9 +125,9 @@
                                 </div>
                                 <div class="text-right">
                                     <p>Pertemuan ke 1</p>
-                                    <a href="{{ route('generate.qr', $item->id) }}" class="btn btn-outline-primary">
+                                    {{-- <a href="{{ route('generate.qr', $item->id) }}" class="btn btn-outline-primary">
                                         <i class="fas fa-qrcode"></i> Generate Kode QR
-                                    </a>
+                                    </a> --}}
                                 </div>
                             </div>
                         </div>
